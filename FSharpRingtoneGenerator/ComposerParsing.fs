@@ -8,6 +8,11 @@
             | Success(result, _, _) -> printfn "Success: %A" result
             | Failure(errorMsg, _, _) -> printfn "Failure: %s" errorMsg
 
+        let tryIfPossible p str =
+            match run p str with
+            | Success(result, _, _) -> result
+            | Failure(errorMsg, _, _) -> raise (new System.ArgumentException(errorMsg))
+
         type MeasureFraction = Half | Quarter | Eighth | Sixteenth | Thirtyseconth
         type Length = { fraction: MeasureFraction; extended: bool }
         type Note = A | ASharp | B | C | CSharp | D | DSharp | E | F | FSharp | G | GSharp
@@ -129,4 +134,5 @@
         //test poctave "2"
         //test pnote "a"
         //test ptoken aspiration
-        test pscore "2- 16a1 16- 16a1 16- 8a1 16- 4a2 16g2 16- 2g2 16- 4- 8- 16g2 16- 16g2 8g2 16- 4c2"
+        //test pscore "2- 16a1 16- 16a1 16- 8a1 16- 4a2 16g2 16- 2g2 16- 4- 8- 16g2 16- 16g2 8g2 16- 4c2"
+        test pscore "fshfdhdfh"

@@ -29,7 +29,10 @@ namespace WpfApplication1
             var filename = filenameTextBox.Text;
             try
             {
+
                 ComposerMethods.ComposerMethods.packSounds(score, filename);
+                MessageBox.Show("A file " + filename + " was created "
+                    + "successfully at your current directory!", "Success!");
             }
             catch (ArgumentException ex)
             {

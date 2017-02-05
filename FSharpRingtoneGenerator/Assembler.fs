@@ -24,6 +24,6 @@
         let produce (score:string) (filename:string) =
             match assembleToPackedStream score with
                 | Choice2Of2 ms -> 
-                    use fs = new FileStream(Path.Combine(__SOURCE_DIRECTORY__, filename), FileMode.Create)
+                    use fs = new FileStream(Path.Combine(".", filename), FileMode.Create)
                     ms.WriteTo(fs)
-                | Choice1Of2 err -> failwith err
+                | Choice1Of2 err -> raise (new System.ArgumentException("We were unable to do things"))

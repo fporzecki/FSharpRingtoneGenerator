@@ -14,6 +14,9 @@ namespace ComposerMethods
             if (Strings.Right(filename, 4) != ".wav")
                 filename += ".wav";
 
+            var result = Parser.Parsing.tryIfPossible(Parser.Parsing.pscore, score);
+            if(result.IsEmpty)
+                throw new ArgumentException("The score could not be parsed!");
             Assembly.Assembler.produce(score, filename);
         }
     }
