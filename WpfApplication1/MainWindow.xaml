@@ -130,64 +130,57 @@
               VerticalAlignment="Top"
               Width="634"
               Grid.ColumnSpan="3">
-            <Button  Height="23"
-                     HorizontalAlignment="Left"
+            <MenuItem  Height="23"
+                     HorizontalAlignment="Center"
                      Name="fileBtn"
                      VerticalAlignment="Top"
-                     Width="33"
-                     Click="dropdown_Click"
-                     Content="File"
-                     BorderThickness="0"
-                     Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}">
-                <Button.ContextMenu>
+                       Width="40"
+                       Click="dropdown_Click"
+                     Header="File"
+                     BorderThickness="0">
+                <MenuItem.ContextMenu>
                     <ContextMenu>
-                        <Button Name="newFileBtn"
-                                Content="New"
+                        <MenuItem Name="newFileBtn"
+                                Header="New"
                                 BorderThickness="0"
-                                Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"
+                                HorizontalAlignment="Stretch"
                                 Click="newFileBtn_Click"/>
-                        <Button Name="saveFileBtn"
-                                Content="Save"
+                        <MenuItem Name="saveFileBtn"
+                                Header="Save"
                                 BorderThickness="0"
-                                Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"
                                 Click="saveBtn_Click"/>
-                        <Button Name="exitFileBtn"
-                                Content="Exit"
+                        <MenuItem Name="exitFileBtn"
+                                Header="Exit"
                                 BorderThickness="0"
-                                Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"
                                 Click="exitBtn"/>
                     </ContextMenu>
-                </Button.ContextMenu>
-            </Button>
-            <Button  Height="23"
+                </MenuItem.ContextMenu>
+            </MenuItem>
+            <MenuItem  Height="23"
                      HorizontalAlignment="Left"
                      Name="editBtn"
                      VerticalAlignment="Top"
-                     Width="33"
-                     Click="dropdown_Click"
-                     Content="Edit"
-                     BorderThickness="0"
-                     Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}">
-                <Button.ContextMenu>
+                       Width="40"
+                       Click="dropdown_Click"
+                     Header="Edit"
+                     BorderThickness="0">
+                <MenuItem.ContextMenu>
                     <ContextMenu>
-                        <Button Name="clearScrBtn"
-                                Content="Clear Score"
+                        <MenuItem Name="clearScrBtn"
+                                Header="Clear Score"
                                 BorderThickness="0"
-                                Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"
                                 Click="clearScoreBtn_Click" />
-                        <Button Name="clearNameBtn"
-                                Content="Clear Name"
+                        <MenuItem Name="clearNameBtn"
+                                Header="Clear Name"
                                 BorderThickness="0"
-                                Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"
                                 Click="button_Click" />
                     </ContextMenu>
-                </Button.ContextMenu>
-            </Button>
-            <Button Name="helpTray" 
-                    Content="Help"
-                    Click="button1_Click"
-                    BorderThickness="0"
-                    Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" />
+                </MenuItem.ContextMenu>
+            </MenuItem>
+            <MenuItem x:Name="helpTray"
+                      Header="Help"
+                      Click="button1_Click"
+                      BorderThickness="0" />
         </Menu>
     </Grid>
 </Window>

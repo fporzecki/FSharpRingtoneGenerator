@@ -153,11 +153,8 @@ namespace WpfApplication1
 
         private static void dropdownContextMenu(object sender)
         {
-            (sender as Button).ContextMenu.IsEnabled = true;
-            (sender as Button).ContextMenu.PlacementTarget = (sender as Button);
-            (sender as Button).ContextMenu.Placement = System.Windows.Controls
-                .Primitives.PlacementMode.Bottom;
-            (sender as Button).ContextMenu.IsOpen = true;
+            (sender as MenuItem).ContextMenu.IsEnabled = true;
+            (sender as MenuItem).ContextMenu.IsOpen = true;
         }
 
         private void newFileBtn_Click(object sender, RoutedEventArgs e)
