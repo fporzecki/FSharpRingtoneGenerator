@@ -5,6 +5,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Threading;
 using Microsoft.VisualBasic;
 using System.Windows.Controls;
+using System.IO;
 
 namespace WpfApplication1
 {
@@ -25,6 +26,7 @@ namespace WpfApplication1
         private void button_Click(object sender, RoutedEventArgs e)
         {
             filenameTextBox.Text = "";
+            saveBtn.IsEnabled = true;
         }
 
         private void saveBtn_Click(object sender, RoutedEventArgs e)
@@ -33,25 +35,51 @@ namespace WpfApplication1
             var filename = filenameTextBox.Text;
             try
             {
+                if (File.Exists(filename))
+                    throw new System.InvalidOperationException("File of this name"
+                        + " already exists!");
 
                 ComposerMethods.ComposerMethods.packSounds(score, filename);
                 MessageBox.Show("A file " + filename + " was created "
                     + "successfully at your current directory!", "Success!");
-                
-                DispatcherTimer timer = new DispatcherTimer();
-                _mediaPlayer.Open(new Uri(filename, UriKind.Relative));
-                timer.Interval = TimeSpan.FromSeconds(1);
-                timer.Tick += timer_Tick;
-                timer.Start();
-                btnPause.IsEnabled = true;
-                btnPlay.IsEnabled = true;
-                btnStop.IsEnabled = true;
 
+                mediaPlayerService(filename);
             }
             catch (ArgumentException ex)
             {
                 MessageBox.Show(ex.Message, "Error!");
             }
+            catch(InvalidOperationException ex)
+            {
+                fileExistsErrorHandling(sender, e, filename, ex);
+            }
+        }
+
+        private void fileExistsErrorHandling(object sender, RoutedEventArgs e, 
+            string filename, InvalidOperationException ex)
+        {
+            MessageBox.Show(ex.Message, "Error!");
+            if (MessageBox.Show("Do you want to replace the existing file?",
+                "Suggestion",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Question) == MessageBoxResult.Yes)
+            {
+                File.Delete(filename);
+                saveBtn_Click(sender, e);
+            }
+        }
+
+        private void mediaPlayerService(string filename)
+        {
+            DispatcherTimer timer = new DispatcherTimer();
+            _mediaPlayer.Open(new Uri(filename, UriKind.Relative));
+            timer.Interval = TimeSpan.FromSeconds(1);
+            timer.Tick += timer_Tick;
+            timer.Start();
+            btnPause.IsEnabled = true;
+            btnPlay.IsEnabled = true;
+            btnStop.IsEnabled = true;
+            saveBtn.IsEnabled = false;
         }
 
         void timer_Tick(object sender, EventArgs e)
@@ -127,7 +155,8 @@ namespace WpfApplication1
         {
             (sender as Button).ContextMenu.IsEnabled = true;
             (sender as Button).ContextMenu.PlacementTarget = (sender as Button);
-            (sender as Button).ContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Bottom;
+            (sender as Button).ContextMenu.Placement = System.Windows.Controls
+                .Primitives.PlacementMode.Bottom;
             (sender as Button).ContextMenu.IsOpen = true;
         }
 
