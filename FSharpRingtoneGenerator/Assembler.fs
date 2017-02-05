@@ -1,4 +1,6 @@
-﻿namespace Assembly
+﻿// Wrapping of sound generator and parses together
+// Functions here write to .wav file
+namespace Assembly
     module Assembler =
 
         open Generator.SignalGenerator

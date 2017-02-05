@@ -1,4 +1,6 @@
-﻿namespace Packer
+﻿// Module for packing up data into a .wav file
+// Using .wav format write-to syntax
+namespace Packer
     module WavePacker =
 
         open System.IO

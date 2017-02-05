@@ -1,4 +1,6 @@
-﻿namespace Generator
+﻿// Sine wave generator
+// Using simple maths and FSharp sequence processing
+namespace Generator
     module SignalGenerator = 
 
         let generateSamples milliseconds frequency =

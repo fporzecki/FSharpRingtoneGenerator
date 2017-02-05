@@ -8,12 +8,10 @@ using System.Windows.Controls;
 
 namespace WpfApplication1
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
-        private MediaPlayer mediaPlayer = new MediaPlayer();
+        private MediaPlayer _mediaPlayer = new MediaPlayer();
+        private bool _paused = false;
         public MainWindow()
         {
             InitializeComponent();
@@ -41,7 +39,7 @@ namespace WpfApplication1
                     + "successfully at your current directory!", "Success!");
                 
                 DispatcherTimer timer = new DispatcherTimer();
-                mediaPlayer.Open(new Uri(filename, UriKind.Relative));
+                _mediaPlayer.Open(new Uri(filename, UriKind.Relative));
                 timer.Interval = TimeSpan.FromSeconds(1);
                 timer.Tick += timer_Tick;
                 timer.Start();
@@ -58,36 +56,57 @@ namespace WpfApplication1
 
         void timer_Tick(object sender, EventArgs e)
         {
-            if (mediaPlayer.Source != null)
+            if (_mediaPlayer.Source != null)
                 lblStatus.Content = String.Format("{0} / {1}", 
-                    mediaPlayer.Position.ToString(@"mm\:ss"), 
-                    mediaPlayer.NaturalDuration.TimeSpan.ToString(@"mm\:ss"));
+                    _mediaPlayer.Position.ToString(@"mm\:ss"), 
+                    _mediaPlayer.NaturalDuration.TimeSpan.ToString(@"mm\:ss"));
             else
                 lblStatus.Content = "No file selected...";
         }
 
         private void btnPlay_Click(object sender, RoutedEventArgs e)
         {
-            if(mediaPlayer.Position.ToString(@"mm\:ss") == "00:00")
+            if(!_paused)
             {
-                mediaPlayer.Play();
+                if (_mediaPlayer.Position.ToString(@"mm\:ss") == "00:00")
+                {
+                    _mediaPlayer.Play();
+                }
+                else if (Strings.Left((string)lblStatus.Content, 5) == _mediaPlayer
+                    .NaturalDuration.TimeSpan.ToString(@"mm\:ss"))
+                {
+                    resetPlayer();
+                }
             }
-            else if(Strings.Left((string)lblStatus.Content, 5) == mediaPlayer
-                .NaturalDuration.TimeSpan.ToString(@"mm\:ss"))
+            else if (_paused && Strings
+                    .Left((string)lblStatus.Content, 5) == _mediaPlayer
+                    .NaturalDuration.TimeSpan.ToString(@"mm\:ss"))
             {
-                mediaPlayer.Stop();
-                mediaPlayer.Play();
+                resetPlayer();
+                _paused = false;
             }
+            else
+            {
+                _mediaPlayer.Play();
+                _paused = false;
+            }
+        }
+
+        private void resetPlayer()
+        {
+            _mediaPlayer.Stop();
+            _mediaPlayer.Play();
         }
 
         private void btnPause_Click(object sender, RoutedEventArgs e)
         {
-            mediaPlayer.Pause();
+            _mediaPlayer.Pause();
+            _paused = true;
         }
 
         private void btnStop_Click(object sender, RoutedEventArgs e)
         {
-            mediaPlayer.Stop();
+            _mediaPlayer.Stop();
         }
 
         private void button1_Click(object sender, RoutedEventArgs e)
@@ -100,6 +119,11 @@ namespace WpfApplication1
         }
 
         private void dropdown_Click(object sender, RoutedEventArgs e)
+        {
+            dropdownContextMenu(sender);
+        }
+
+        private static void dropdownContextMenu(object sender)
         {
             (sender as Button).ContextMenu.IsEnabled = true;
             (sender as Button).ContextMenu.PlacementTarget = (sender as Button);
