@@ -1,5 +1,10 @@
 ﻿using System;
 using System.Windows;
+using System.Windows.Media;
+using System.Windows.Media.Animation;
+using System.Windows.Threading;
+using Microsoft.VisualBasic;
+using System.Windows.Controls;
 
 namespace WpfApplication1
 {
@@ -8,6 +13,7 @@ namespace WpfApplication1
     /// </summary>
     public partial class MainWindow : Window
     {
+        private MediaPlayer mediaPlayer = new MediaPlayer();
         public MainWindow()
         {
             InitializeComponent();
@@ -33,11 +39,55 @@ namespace WpfApplication1
                 ComposerMethods.ComposerMethods.packSounds(score, filename);
                 MessageBox.Show("A file " + filename + " was created "
                     + "successfully at your current directory!", "Success!");
+                
+                DispatcherTimer timer = new DispatcherTimer();
+                mediaPlayer.Open(new Uri(filename, UriKind.Relative));
+                timer.Interval = TimeSpan.FromSeconds(1);
+                timer.Tick += timer_Tick;
+                timer.Start();
+                btnPause.IsEnabled = true;
+                btnPlay.IsEnabled = true;
+                btnStop.IsEnabled = true;
+
             }
             catch (ArgumentException ex)
             {
                 MessageBox.Show(ex.Message, "Error!");
             }
+        }
+
+        void timer_Tick(object sender, EventArgs e)
+        {
+            if (mediaPlayer.Source != null)
+                lblStatus.Content = String.Format("{0} / {1}", 
+                    mediaPlayer.Position.ToString(@"mm\:ss"), 
+                    mediaPlayer.NaturalDuration.TimeSpan.ToString(@"mm\:ss"));
+            else
+                lblStatus.Content = "No file selected...";
+        }
+
+        private void btnPlay_Click(object sender, RoutedEventArgs e)
+        {
+            if(mediaPlayer.Position.ToString(@"mm\:ss") == "00:00")
+            {
+                mediaPlayer.Play();
+            }
+            else if(Strings.Left((string)lblStatus.Content, 5) == mediaPlayer
+                .NaturalDuration.TimeSpan.ToString(@"mm\:ss"))
+            {
+                mediaPlayer.Stop();
+                mediaPlayer.Play();
+            }
+        }
+
+        private void btnPause_Click(object sender, RoutedEventArgs e)
+        {
+            mediaPlayer.Pause();
+        }
+
+        private void btnStop_Click(object sender, RoutedEventArgs e)
+        {
+            mediaPlayer.Stop();
         }
 
         private void button1_Click(object sender, RoutedEventArgs e)
@@ -47,6 +97,25 @@ namespace WpfApplication1
                 + "It's considered good practice for the name to end with .wav"
                 + " but if you don't give it this ending, then the program"
                 + " will do it for you.", "Help");
+        }
+
+        private void dropdown_Click(object sender, RoutedEventArgs e)
+        {
+            (sender as Button).ContextMenu.IsEnabled = true;
+            (sender as Button).ContextMenu.PlacementTarget = (sender as Button);
+            (sender as Button).ContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Bottom;
+            (sender as Button).ContextMenu.IsOpen = true;
+        }
+
+        private void newFileBtn_Click(object sender, RoutedEventArgs e)
+        {
+            clearScoreBtn_Click(sender, e);
+            button_Click(sender, e);
+        }
+
+        private void exitBtn(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
         }
     }
 }

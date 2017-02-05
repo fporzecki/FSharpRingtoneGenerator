@@ -1,7 +1,11 @@
-﻿namespace Parser
+﻿// The module for parsing musical notation
+// Converts input to a list of Tokens
+namespace Parser
     module Parsing =
 
         open FParsec
+        open System
+        open System.Windows
 
         let test p str =
             match run p str with
@@ -13,7 +17,7 @@
             | Success(result, _, _) -> result
             | Failure(errorMsg, _, _) -> raise (new System.ArgumentException(errorMsg))
 
-        type MeasureFraction = Half | Quarter | Eighth | Sixteenth | Thirtyseconth
+        type MeasureFraction = Full | Half | Quarter | Eighth | Sixteenth | Thirtyseconth
         type Length = { fraction: MeasureFraction; extended: bool }
         type Note = A | ASharp | B | C | CSharp | D | DSharp | E | F | FSharp | G | GSharp
         type Octave = One | Two | Three
@@ -24,7 +28,8 @@
 
         // parsers are all lower-case
         let pmeasurefraction = 
-            (stringReturn "2" Half)
+            (stringReturn "1" Full)
+            <|> (stringReturn "2" Half)
             <|> (stringReturn "4" Quarter)
             <|> (stringReturn "8" Eighth)
             <|> (stringReturn "16" Sixteenth)
@@ -98,7 +103,7 @@
                 | Failure(errorMsg, _, _) -> Choice1Of2 errorMsg
 
         let durationFromToken token =
-            let bpm = 720.
+            let bpm = 200.
             let secondsPerBeat = 60./bpm
             (match token.length.fraction with
                 | Full -> 4.*1000.*secondsPerBeat
