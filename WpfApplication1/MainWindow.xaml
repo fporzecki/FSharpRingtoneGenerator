@@ -62,7 +62,8 @@
                  TextWrapping="Wrap"
                  Text="Ringtone.wav"
                  VerticalAlignment="Top"
-                 Width="224" />
+                 Width="224"
+                 TextChanged="filenameTextBox_TextChanged" />
         <TextBox x:Name="tempoTextBox"
                  HorizontalAlignment="Left"
                  Height="25"

@@ -196,5 +196,10 @@ namespace WpfApplication1
         {
             Application.Current.Shutdown();
         }
+
+        private void filenameTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            saveBtn.IsEnabled = true;
+        }
     }
 }
