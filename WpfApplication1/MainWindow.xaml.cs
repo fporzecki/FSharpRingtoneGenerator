@@ -27,7 +27,6 @@ namespace WpfApplication1
         private void button_Click(object sender, RoutedEventArgs e)
         {
             filenameTextBox.Text = "";
-            saveBtn.IsEnabled = true;
         }
 
         private void saveBtn_Click(object sender, RoutedEventArgs e)
@@ -100,7 +99,6 @@ namespace WpfApplication1
 
         private void mediaPlayerService(string filename)
         {
-            saveBtn.IsEnabled = false;
             DispatcherTimer timer = new DispatcherTimer();
             Thread.Sleep(1000); // this is very brute force, highly not recommended in any way, shape or form
             _mediaPlayer.Open(new Uri(filename, UriKind.Relative));
@@ -196,10 +194,6 @@ namespace WpfApplication1
         {
             Application.Current.Shutdown();
         }
-
-        private void filenameTextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            saveBtn.IsEnabled = true;
-        }
+        
     }
 }
